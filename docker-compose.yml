@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: expense-postgres
+    environment:
+      POSTGRES_DB: expensedb
+      POSTGRES_USER: expenseuser
+      POSTGRES_PASSWORD: expensepass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - expense-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: expense-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/expensedb
+      SPRING_DATASOURCE_USERNAME: expenseuser
+      SPRING_DATASOURCE_PASSWORD: expensepass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - expense-network
+
+networks:
+  expense-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
