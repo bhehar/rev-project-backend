@@ -23,7 +23,10 @@ public class ExpenseController {
     private ExpenseRepository expenseRepo;
 
     @GetMapping
-    public List<Expense> getAllExpenses() {
+    public List<Expense> getExpenses(@RequestParam(required = false) String employeeId) {
+        if (employeeId != null) {
+            return expenseRepo.findByEmployeeId(employeeId);
+        }
         return expenseRepo.findAll();
     }
 
