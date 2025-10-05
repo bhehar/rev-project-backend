@@ -5,15 +5,15 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-enum UserRole {
-    USER,
-    ADMIN
-}
-
 @Entity
 @Data
 @Table(name = "app_users")
 public class User {
+
+    public static enum UserRole {
+        USER,
+        ADMIN
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

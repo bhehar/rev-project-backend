@@ -2,6 +2,7 @@ package com.bhehar.expense.controller;
 
 import com.bhehar.expense.entity.Expense;
 import com.bhehar.expense.entity.User;
+import com.bhehar.expense.entity.User.UserRole;
 import com.bhehar.expense.repository.UserRepository;
 
 import jakarta.validation.Valid;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
@@ -23,7 +23,11 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers(@RequestParam(required = false) String role) {
+        if (role != null) {
+            User.UserRole enumRole = UserRole.valueOf(role.toUpperCase());
+            return userRepository.findByRole(enumRole);
+        }
         return userRepository.findAll();
     }
 
