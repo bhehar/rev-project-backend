@@ -14,10 +14,4 @@ jobs:
         run: |
           echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
           chmod 600 key.pem
-          ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
-            cd rev-project-backend
-            git pull origin main
-            docker-compose down
-            docker-compose up -d --build
-            docker-compose logs --tail=50
-          EOF
+          ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "cd rev-project-backend && git pull origin main && docker-compose down && docker-compose up -d --build && docker-compose logs --tail=50"
